@@ -34,7 +34,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
-bool  FFT(float *Rdat, float *Idat, int N, int LogN, int Ft_Flag)
+bool  FFT(int *Rdat, int *Idat, int N, int LogN, int Ft_Flag)
 {
   // parameters error check:
   if((Rdat == NULL) || (Idat == NULL))                  return false;
@@ -44,21 +44,17 @@ bool  FFT(float *Rdat, float *Idat, int N, int LogN, int Ft_Flag)
   if((Ft_Flag != FT_DIRECT) && (Ft_Flag != FT_INVERSE)) return false;
  
   register int  i, j, n, k, io, ie, in, nn;
-  float         ru, iu, rtp, itp, rtq, itq, rw, iw, sr;
+  int         ru, iu, rtp, itp, rtq, itq, rw, iw, sr;
  
-  static const float Rcoef[14] =
-  {  -1.0000000000000000F,  0.0000000000000000F,  0.7071067811865475F,
-      0.9238795325112867F,  0.9807852804032304F,  0.9951847266721969F,
-      0.9987954562051724F,  0.9996988186962042F,  0.9999247018391445F,
-      0.9999811752826011F,  0.9999952938095761F,  0.9999988234517018F,
-      0.9999997058628822F,  0.9999999264657178F
+  static const int Rcoef[14] =
+  {  -4096, 0, 2896, 3784, 4017, 
+      4076, 4091, 4095, 4096, 4096, 
+      4096, 4096, 4096, 4096
   };
-  static const float Icoef[14] =
-  {   0.0000000000000000F, -1.0000000000000000F, -0.7071067811865474F,
-     -0.3826834323650897F, -0.1950903220161282F, -0.0980171403295606F,
-     -0.0490676743274180F, -0.0245412285229122F, -0.0122715382857199F,
-     -0.0061358846491544F, -0.0030679567629659F, -0.0015339801862847F,
-     -0.0007669903187427F, -0.0003834951875714F
+  static const int Icoef[14] =
+  {   0, -4096, -2896, -1567, -799, 
+      -401, -201, -101, -50, -25, 
+      -13, -6, -3, -2 
   };
  
   nn = N >> 1;
@@ -69,8 +65,8 @@ bool  FFT(float *Rdat, float *Idat, int N, int LogN, int Ft_Flag)
     iw = Icoef[LogN - n];
     if(Ft_Flag == FT_INVERSE) iw = -iw;
     in = ie >> 1;
-    ru = 1.0F;
-    iu = 0.0F;
+    ru = 1;
+    iu = 0;
     for(j=0; j<in; j++)
     {
       for(i=j; i<N; i+=ie)
@@ -121,12 +117,11 @@ bool  FFT(float *Rdat, float *Idat, int N, int LogN, int Ft_Flag)
  
   if(Ft_Flag == FT_INVERSE) return true;
  
-  rw = 1.0F / N;
- 
+   
   for(i=0; i<N; i++)
   {
-    Rdat[i] *= rw;
-    Idat[i] *= rw;
+    Rdat[i] /=  N;
+    Idat[i] /=  N;
   }
  
   return true;
@@ -136,7 +131,7 @@ bool  FFT(float *Rdat, float *Idat, int N, int LogN, int Ft_Flag)
 
 void FFT_probe(){
   
-  float RealData[2048] = {
+  int RealData[2048] = {
     52410, 13665, 58737, 48871, 35153, 63568, 37020, 14267, 56214, 56492, 20533, 21429, 55051, 32279, 3401, 50988, 
     27962, 18348, 21857, 24048, 52088, 2536, 47623, 57192, 18731, 43047, 15197, 40760, 4923, 63357, 39975, 25147, 
     2003, 56201, 39554, 55564, 33071, 518, 60232, 26916, 47996, 9903, 53427, 59612, 50983, 49619, 26555, 46000, 
@@ -266,7 +261,7 @@ void FFT_probe(){
     44398, 64726, 65094, 49646, 18026, 62522, 26941, 14197, 41231, 974, 2838, 11814, 13138, 47144, 29024, 55410, 
     25545, 54890, 49048, 38264, 10523, 34658, 30322, 24874, 6110, 16983, 22009, 24583, 9585, 20760, 18430, 53748 };
 
-  float ImagData[2048] = {
+  int ImagData[2048] = {
     22419, 57148, 17566, 50819, 39925, 1178, 45974, 1032, 44820, 57534, 28299, 41376, 38407, 14904, 51423, 18851, 
     60580, 19561, 35147, 21866, 15551, 35733, 7057, 8989, 6188, 20374, 53257, 33657, 56785, 64257, 21408, 14393, 
     33962, 23135, 56327, 17041, 55294, 38194, 47147, 22513, 608, 12612, 33252, 1589, 36048, 18100, 45629, 57760, 
@@ -398,7 +393,7 @@ void FFT_probe(){
   
 
   int i;
-  for (i = 0; i<10000; i++)
+  for (i = 0; i<1000; i++)
     FFT(RealData, ImagData, 2048, 11, -1);
 
 }
