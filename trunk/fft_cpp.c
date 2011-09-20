@@ -33,8 +33,9 @@
 
 #include <stddef.h>
 #include <stdio.h>
+// typedef int qint16;
 
-bool  FFT(int *Rdat, int *Idat, int N, int LogN, int Ft_Flag)
+bool  FFT(qint16 *Rdat, qint16 *Idat, qint16 N, qint16 LogN, qint16 Ft_Flag)
 {
   // parameters error check:
   if((Rdat == NULL) || (Idat == NULL))                  return false;
@@ -43,15 +44,15 @@ bool  FFT(int *Rdat, int *Idat, int N, int LogN, int Ft_Flag)
   if((LogN < 2) || (LogN > 14))                         return false;
   if((Ft_Flag != FT_DIRECT) && (Ft_Flag != FT_INVERSE)) return false;
  
-  register int  i, j, n, k, io, ie, in, nn;
-  int         ru, iu, rtp, itp, rtq, itq, rw, iw, sr;
+  register qint16  i, j, n, k, io, ie, in, nn;
+  qint16         ru, iu, rtp, itp, rtq, itq, rw, iw, sr;
  
-  static const int Rcoef[14] =
+  static const qint16 Rcoef[14] =
   {  -4096, 0, 2896, 3784, 4017, 
       4076, 4091, 4095, 4096, 4096, 
       4096, 4096, 4096, 4096
   };
-  static const int Icoef[14] =
+  static const qint16 Icoef[14] =
   {   0, -4096, -2896, -1567, -799, 
       -401, -201, -101, -50, -25, 
       -13, -6, -3, -2 
@@ -131,7 +132,7 @@ bool  FFT(int *Rdat, int *Idat, int N, int LogN, int Ft_Flag)
 
 void FFT_probe(){
   
-  int RealData[2048] = {
+  qint16 RealData[2048] = {
     52410, 13665, 58737, 48871, 35153, 63568, 37020, 14267, 56214, 56492, 20533, 21429, 55051, 32279, 3401, 50988, 
     27962, 18348, 21857, 24048, 52088, 2536, 47623, 57192, 18731, 43047, 15197, 40760, 4923, 63357, 39975, 25147, 
     2003, 56201, 39554, 55564, 33071, 518, 60232, 26916, 47996, 9903, 53427, 59612, 50983, 49619, 26555, 46000, 
@@ -261,7 +262,7 @@ void FFT_probe(){
     44398, 64726, 65094, 49646, 18026, 62522, 26941, 14197, 41231, 974, 2838, 11814, 13138, 47144, 29024, 55410, 
     25545, 54890, 49048, 38264, 10523, 34658, 30322, 24874, 6110, 16983, 22009, 24583, 9585, 20760, 18430, 53748 };
 
-  int ImagData[2048] = {
+  qint16 ImagData[2048] = {
     22419, 57148, 17566, 50819, 39925, 1178, 45974, 1032, 44820, 57534, 28299, 41376, 38407, 14904, 51423, 18851, 
     60580, 19561, 35147, 21866, 15551, 35733, 7057, 8989, 6188, 20374, 53257, 33657, 56785, 64257, 21408, 14393, 
     33962, 23135, 56327, 17041, 55294, 38194, 47147, 22513, 608, 12612, 33252, 1589, 36048, 18100, 45629, 57760, 
