@@ -12,10 +12,11 @@ LIBS =
 
 CC = g++
 
-CFLAGS = 
+CFLAGS = -Wall
+TARGET = arm
 
 all: clean note $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME).elf $(OBJS) $(LIBS)
+	$(CC) $(CFLAGS) -o $(NAME).elf $(OBJS) $(LIBS) 
 	rm $(OBJS)
 	@echo "******************** SUCCESS **********************"
 
